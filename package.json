@@ -1,5 +1,6 @@
 {
   "name": "message-boards",
+  "homepage": "https://kthatoto.github.io/message-boards/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
