@@ -1,10 +1,19 @@
+import { useCallback, useEffect, useState } from "react";
 import { Issue } from "@/pages/api/issues";
 
 export const useIssues = () => {
-  const getIssues = async (): Promise<Issue[]> => {
+  const [issues, setIssues] = useState<Issue[]>([]);
+
+  const getIssues = useCallback(async (): Promise<Issue[]> => {
     const res = await fetch(`/api/issues`);
     return await res.json();
-  };
+  }, []);
 
-  return { getIssues };
+  useEffect(() => {
+    (async () => {
+      setIssues(await getIssues());
+    })();
+  }, [getIssues]);
+
+  return { issues };
 };
