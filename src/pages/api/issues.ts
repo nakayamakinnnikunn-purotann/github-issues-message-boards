@@ -36,7 +36,5 @@ const query = `
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const issuesResponse = await graphqlClient<IssuesResponse>(query, { first: 10 });
-  return res.status(200).json({
-    issues: issuesResponse.repository.issues.nodes,
-  });
+  return res.status(200).json(issuesResponse.repository.issues.nodes);
 };

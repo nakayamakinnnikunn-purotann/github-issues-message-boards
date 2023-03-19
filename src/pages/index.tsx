@@ -8,7 +8,7 @@ const Home = () => {
       <h1>掲示板</h1>
       <ul>
         {issues.map((issue) => (
-          <li>{issue.title}</li>
+          <li key={issue.number}>{issue.title}</li>
         ))}
       </ul>
     </>
