@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { graphqlClient } from "@/utils/graphqlClient";
-
 import { OWNER, REPOSITORY } from "@/constants";
+import { graphqlClient } from "@/utils/graphqlClient";
 
 export type Comment = {
   id: string;
@@ -49,15 +48,12 @@ query ($owner: String!, $repository: String!, $issueNumber: Int!, $commentCount:
 
 const get = async (req: NextApiRequest, res: NextApiResponse) => {
   const { issueNumber } = req.query;
-  const commentsResponse = await graphqlClient<IssueResponse>(
-    getIssueCommentsQuery,
-    {
-      owner: OWNER,
-      repository: REPOSITORY,
-      issueNumber: Number(issueNumber),
-      commentCount: 50,
-    }
-  );
+  const commentsResponse = await graphqlClient<IssueResponse>(getIssueCommentsQuery, {
+    owner: OWNER,
+    repository: REPOSITORY,
+    issueNumber: Number(issueNumber),
+    commentCount: 50,
+  });
   return res.status(200).json(commentsResponse);
 };
 
@@ -65,6 +61,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === "GET") {
     await get(req, res);
   } else {
-    throw new Error(`unsupported method: ${req.method}`)
+    throw new Error(`unsupported method: ${req.method}`);
   }
 }

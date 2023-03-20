@@ -1,5 +1,5 @@
-import type { AppProps } from 'next/app'
-import { AppShell, Header, MantineProvider, Title } from '@mantine/core'
+import { AppShell, Header, MantineProvider, Title } from "@mantine/core";
+import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -14,5 +14,5 @@ export default function App({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </AppShell>
     </MantineProvider>
-  )
+  );
 }

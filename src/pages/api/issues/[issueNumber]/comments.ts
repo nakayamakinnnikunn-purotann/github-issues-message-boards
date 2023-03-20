@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { graphqlClient } from "@/utils/graphqlClient";
-
 import { Comment } from "@/pages/api/issues/[issueNumber]";
+import { graphqlClient } from "@/utils/graphqlClient";
 
 type CreateCommentResponse = {
   addComment: {
@@ -31,10 +30,10 @@ const post = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!issueId || !body) {
     return res.status(400);
   }
-  const createCommentResponse = await graphqlClient<CreateCommentResponse>(
-    createCommentMutation,
-    { issueId, body }
-  );
+  const createCommentResponse = await graphqlClient<CreateCommentResponse>(createCommentMutation, {
+    issueId,
+    body,
+  });
   return res.status(201).json(createCommentResponse.addComment.commentEdge.node);
 };
 
@@ -42,6 +41,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === "POST") {
     await post(req, res);
   } else {
-    throw new Error(`unsupported method: ${req.method}`)
+    throw new Error(`unsupported method: ${req.method}`);
   }
 }

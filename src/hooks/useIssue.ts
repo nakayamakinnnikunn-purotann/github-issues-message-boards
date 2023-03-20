@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+
 import { Comment, Issue, IssueResponse } from "@/pages/api/issues/[issueNumber]";
 
 export const useIssue = (issueNumber: string) => {
@@ -11,21 +12,24 @@ export const useIssue = (issueNumber: string) => {
     return await res.json();
   }, [issueNumber]);
 
-  const createComment = useCallback(async (body: string) => {
-    const res = await fetch(`/api/issues/${issueNumber}/comments`, {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        issueId: issue?.id,
-        body,
-      }),
-    });
-    const newComment: Comment = await res.json();
-    setComments([...comments, newComment]);
-  }, [issueNumber, issue, comments]);
+  const createComment = useCallback(
+    async (body: string) => {
+      const res = await fetch(`/api/issues/${issueNumber}/comments`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          issueId: issue?.id,
+          body,
+        }),
+      });
+      const newComment: Comment = await res.json();
+      setComments([...comments, newComment]);
+    },
+    [issueNumber, issue, comments]
+  );
 
   useEffect(() => {
     (async () => {

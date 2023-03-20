@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { graphqlClient } from "@/utils/graphqlClient";
-
 import { OWNER, REPOSITORY } from "@/constants";
+import { graphqlClient } from "@/utils/graphqlClient";
 
 export type Issue = {
   number: number;
@@ -69,10 +68,11 @@ mutation ($repositoryId: ID!, $title: String!, $body: String) {
 `;
 
 const get = async (req: NextApiRequest, res: NextApiResponse) => {
-  const issuesResponse = await graphqlClient<IssuesResponse>(
-    getRepositoryIssuesQuery,
-    { owner: OWNER, repository: REPOSITORY, issueCount: 50 }
-  );
+  const issuesResponse = await graphqlClient<IssuesResponse>(getRepositoryIssuesQuery, {
+    owner: OWNER,
+    repository: REPOSITORY,
+    issueCount: 50,
+  });
   return res.status(200).json(issuesResponse);
 };
 
@@ -81,10 +81,11 @@ const post = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!repositoryId || !title) {
     return res.status(400);
   }
-  const createIssueResponse = await graphqlClient<CreateIssueResponse>(
-    createIssueMutation,
-    { repositoryId, title, body }
-  );
+  const createIssueResponse = await graphqlClient<CreateIssueResponse>(createIssueMutation, {
+    repositoryId,
+    title,
+    body,
+  });
   return res.status(201).json(createIssueResponse.createIssue.issue);
 };
 
@@ -94,6 +95,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } else if (req.method === "POST") {
     await post(req, res);
   } else {
-    throw new Error(`unsupported method: ${req.method}`)
+    throw new Error(`unsupported method: ${req.method}`);
   }
-};
+}

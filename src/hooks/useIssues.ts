@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+
 import { Issue, IssuesResponse } from "@/pages/api/issues";
 
 export const useIssues = () => {
@@ -10,22 +11,25 @@ export const useIssues = () => {
     return await res.json();
   }, []);
 
-  const createIssue = useCallback(async (title: string, body?: string) => {
-    const res = await fetch("/api/issues", {
-      method: "POST",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        repositoryId,
-        title,
-        body,
-      }),
-    });
-    const newIssue: Issue = await res.json();
-    setIssues([newIssue, ...issues]);
-  }, [repositoryId, issues]);
+  const createIssue = useCallback(
+    async (title: string, body?: string) => {
+      const res = await fetch("/api/issues", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          repositoryId,
+          title,
+          body,
+        }),
+      });
+      const newIssue: Issue = await res.json();
+      setIssues([newIssue, ...issues]);
+    },
+    [repositoryId, issues]
+  );
 
   useEffect(() => {
     (async () => {
