@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import { Comment, IssueResponse } from "@/pages/api/issues/[id]";
+import { Comment, Issue, IssueResponse } from "@/pages/api/issues/[issueNumber]";
 
-export const useIssue = (issueNumber: number) => {
+export const useIssue = (issueNumber: string) => {
+  const [issue, setIssue] = useState<Issue | undefined>();
   const [comments, setComments] = useState<Comment[]>([]);
 
   const getIssue = useCallback(async (): Promise<IssueResponse> => {
@@ -12,9 +13,11 @@ export const useIssue = (issueNumber: number) => {
   useEffect(() => {
     (async () => {
       const res = await getIssue();
-      setComments(res.repository.issue.comments.nodes);
+      const { comments, ...issue } = res.repository.issue;
+      setIssue(issue);
+      setComments(comments.nodes);
     })();
   }, [getIssue]);
 
-  return { comments };
+  return { issue, comments };
 };

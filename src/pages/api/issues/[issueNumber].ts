@@ -5,16 +5,21 @@ import { graphqlClient } from "@/utils/graphqlClient";
 import { OWNER, REPOSITORY } from "@/constants";
 
 export type Comment = {
+  id: string;
+  bodyText: string;
+  createdAt: string;
+};
+
+export type Issue = {
+  id: string;
+  title: string;
   bodyText: string;
   createdAt: string;
 };
 
 export type IssueResponse = {
   repository: {
-    issue: {
-      id: string;
-      title: string;
-      bodyText: string;
+    issue: Issue & {
       comments: {
         nodes: Comment[];
       };
@@ -28,12 +33,14 @@ type CreateCommentResponse = {
 const getIssueCommentsQuery = `
 query ($owner: String!, $repository: String!, $issueNumber: Int!, $commentCount: Int!) {
   repository(owner: $owner, name: $repository) {
-    issue(number: $issueId) {
+    issue(number: $issueNumber) {
       id
       title
       bodyText
+      createdAt
       comments(first: $commentCount, orderBy: {field: UPDATED_AT, direction: DESC}) {
         nodes {
+          id
           bodyText
           createdAt
         }
@@ -47,13 +54,13 @@ const createCommentMutation = `
 `;
 
 const get = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query;
+  const { issueNumber } = req.query;
   const commentsResponse = await graphqlClient<IssueResponse>(
     getIssueCommentsQuery,
     {
       owner: OWNER,
       repository: REPOSITORY,
-      issueNumber: id,
+      issueNumber: Number(issueNumber),
       commentCount: 50,
     }
   );
