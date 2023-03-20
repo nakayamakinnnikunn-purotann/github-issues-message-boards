@@ -1,10 +1,18 @@
 import type { AppProps } from 'next/app'
-import { MantineProvider } from '@mantine/core'
+import { AppShell, Header, MantineProvider, Title } from '@mantine/core'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
-      <Component {...pageProps} />
+      <AppShell
+        header={
+          <Header height={70} p="sm">
+            <Title>掲示板</Title>
+          </Header>
+        }
+      >
+        <Component {...pageProps} />
+      </AppShell>
     </MantineProvider>
   )
 }
