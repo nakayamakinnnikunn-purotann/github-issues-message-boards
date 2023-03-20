@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Group, Stack, Text, Textarea, TextInput } from "@mantine/core";
+import { Badge, Button, Card, Group, Stack, Text, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Link from "next/link";
 import { useCallback } from "react";
