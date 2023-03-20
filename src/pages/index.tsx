@@ -16,9 +16,10 @@ const Home = () => {
       title: (val) => val ? null : "Required",
     },
   });
-  const submit = useCallback(({ title, body }: { title: string, body: string }) => {
-    createIssue(title, body ? body : undefined);
-  }, [createIssue]);
+  const submit = useCallback(async ({ title, body }: { title: string, body: string }) => {
+    await createIssue(title, body ? body : undefined);
+    form.reset();
+  }, [createIssue, form]);
 
   return (
     <Stack spacing={12} sx={{ width: 400 }}>

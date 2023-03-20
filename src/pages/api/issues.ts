@@ -15,8 +15,9 @@ export type Issue = {
   };
 };
 
-type IssuesResponse = {
+export type IssuesResponse = {
   repository: {
+    id: string;
     issues: {
       nodes: Issue[];
     };
@@ -77,7 +78,7 @@ const get = async (req: NextApiRequest, res: NextApiResponse) => {
     getRepositoryIssues,
     { owner: OWNER, repository: REPOSITORY, first: 10 }
   );
-  return res.status(200).json(issuesResponse.repository.issues.nodes);
+  return res.status(200).json(issuesResponse);
 };
 
 const post = async (req: NextApiRequest, res: NextApiResponse) => {

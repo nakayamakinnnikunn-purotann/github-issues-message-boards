@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { Issue } from "@/pages/api/issues";
+import { Issue, IssuesResponse } from "@/pages/api/issues";
 
 export const useIssues = () => {
+  const [repositoryId, setRepositoryId] = useState<string | undefined>();
   const [issues, setIssues] = useState<Issue[]>([]);
 
-  const getIssues = useCallback(async (): Promise<Issue[]> => {
+  const getIssues = useCallback(async (): Promise<IssuesResponse> => {
     const res = await fetch("/api/issues");
     return await res.json();
   }, []);
@@ -17,17 +18,20 @@ export const useIssues = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        repositoryId,
         title,
         body,
       }),
     });
     const newIssue: Issue = await res.json();
     setIssues([newIssue, ...issues]);
-  }, [issues]);
+  }, [repositoryId, issues]);
 
   useEffect(() => {
     (async () => {
-      setIssues(await getIssues());
+      const res = await getIssues();
+      setRepositoryId(res.repository.id);
+      setIssues(res.repository.issues.nodes);
     })();
   }, [getIssues]);
 
