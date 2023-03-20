@@ -3,9 +3,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { graphqlClient } from "@/utils/graphqlClient";
 
 export type Issue = {
+  number: number;
   title: string;
-  number: string;
+  bodyText: string;
   createdAt: string;
+  comments: {
+    totalCount: number;
+  };
 };
 
 type IssuesResponse = {
@@ -20,14 +24,18 @@ const query = `
   query ($first: Int!) {
     repository(owner: "kthatoto", name: "message-boards") {
       issues(
-        first: $first,
-        orderBy: {field: CREATED_AT, direction: DESC},
+        first: $first
+        orderBy: {field: CREATED_AT, direction: DESC}
         states: OPEN
       ) {
         nodes {
-          title
           number
+          title
+          bodyText
           createdAt
+          comments {
+            totalCount
+          }
         }
       }
     }
