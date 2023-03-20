@@ -2,8 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 import { graphqlClient } from "@/utils/graphqlClient";
 
-const OWNER = "kthatoto";
-const REPOSITORY = "message-boards";
+import { OWNER, REPOSITORY } from "@/constants";
 
 export type Issue = {
   number: number;
@@ -30,12 +29,12 @@ type CreateIssueResponse = {
   };
 };
 
-const getRepositoryIssues = `
-query ($owner: String!, $repository: String!, $first: Int!) {
+const getRepositoryIssuesQuery = `
+query ($owner: String!, $repository: String!, $issueCount: Int!) {
   repository(owner: $owner, name: $repository) {
     id
     issues(
-      first: $first
+      first: $issueCount
       orderBy: {field: CREATED_AT, direction: DESC}
       states: OPEN
     ) {
@@ -53,13 +52,9 @@ query ($owner: String!, $repository: String!, $first: Int!) {
 }
 `;
 
-const createIssue = `
+const createIssueMutation = `
 mutation ($repositoryId: ID!, $title: String!, $body: String) {
-  createIssue(input: {
-    repositoryId: $repositoryId,
-    title: $title,
-    body: $body,
-  }) {
+  createIssue(input: {repositoryId: $repositoryId, title: $title, body: $body}) {
     issue {
       number
       title
@@ -75,8 +70,8 @@ mutation ($repositoryId: ID!, $title: String!, $body: String) {
 
 const get = async (req: NextApiRequest, res: NextApiResponse) => {
   const issuesResponse = await graphqlClient<IssuesResponse>(
-    getRepositoryIssues,
-    { owner: OWNER, repository: REPOSITORY, first: 50 }
+    getRepositoryIssuesQuery,
+    { owner: OWNER, repository: REPOSITORY, issueCount: 50 }
   );
   return res.status(200).json(issuesResponse);
 };
@@ -87,7 +82,7 @@ const post = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(400);
   }
   const createIssueResponse = await graphqlClient<CreateIssueResponse>(
-    createIssue,
+    createIssueMutation,
     { repositoryId, title, body }
   );
   return res.status(201).json(createIssueResponse.createIssue.issue);
