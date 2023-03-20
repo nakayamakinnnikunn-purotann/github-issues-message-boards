@@ -76,7 +76,7 @@ mutation ($repositoryId: ID!, $title: String!, $body: String) {
 const get = async (req: NextApiRequest, res: NextApiResponse) => {
   const issuesResponse = await graphqlClient<IssuesResponse>(
     getRepositoryIssues,
-    { owner: OWNER, repository: REPOSITORY, first: 10 }
+    { owner: OWNER, repository: REPOSITORY, first: 50 }
   );
   return res.status(200).json(issuesResponse);
 };
