@@ -25,7 +25,7 @@ export const useIssue = (issueNumber: string) => {
     });
     const newComment: Comment = await res.json();
     setComments([...comments, newComment]);
-  }, [issue, comments]);
+  }, [issueNumber, issue, comments]);
 
   useEffect(() => {
     (async () => {
