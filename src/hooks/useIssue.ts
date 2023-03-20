@@ -10,6 +10,18 @@ export const useIssue = (issueNumber: string) => {
     return await res.json();
   }, [issueNumber]);
 
+  const createComment = useCallback(async (body: string) => {
+    const res = await fetch(`/api/issues/${issueNumber}/comments`, {
+      method: "POST",
+      body: JSON.stringify({
+        issueId: issue?.id,
+        body,
+      }),
+    });
+    const newComment: Comment = await res.json();
+    setComments([...comments, newComment]);
+  }, [issue, comments]);
+
   useEffect(() => {
     (async () => {
       const res = await getIssue();
@@ -19,5 +31,5 @@ export const useIssue = (issueNumber: string) => {
     })();
   }, [getIssue]);
 
-  return { issue, comments };
+  return { issue, comments, createComment };
 };

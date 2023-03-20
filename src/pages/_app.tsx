@@ -7,7 +7,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <AppShell
         header={
           <Header height={70} p="sm">
-            <Title>掲示板</Title>
+            <Title>Message Boards</Title>
           </Header>
         }
       >

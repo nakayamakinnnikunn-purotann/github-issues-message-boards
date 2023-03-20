@@ -27,9 +27,6 @@ export type IssueResponse = {
   };
 };
 
-type CreateCommentResponse = {
-};
-
 const getIssueCommentsQuery = `
 query ($owner: String!, $repository: String!, $issueNumber: Int!, $commentCount: Int!) {
   repository(owner: $owner, name: $repository) {
@@ -38,7 +35,7 @@ query ($owner: String!, $repository: String!, $issueNumber: Int!, $commentCount:
       title
       bodyText
       createdAt
-      comments(first: $commentCount, orderBy: {field: UPDATED_AT, direction: DESC}) {
+      comments(first: $commentCount, orderBy: {field: UPDATED_AT, direction: ASC}) {
         nodes {
           id
           bodyText
@@ -48,9 +45,6 @@ query ($owner: String!, $repository: String!, $issueNumber: Int!, $commentCount:
     }
   }
 }
-`;
-
-const createCommentMutation = `
 `;
 
 const get = async (req: NextApiRequest, res: NextApiResponse) => {

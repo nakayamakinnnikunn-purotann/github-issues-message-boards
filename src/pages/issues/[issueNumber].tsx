@@ -1,12 +1,25 @@
-import { Anchor, Card, Stack, Text, Title } from "@mantine/core";
+import { Anchor, Button, Card, Stack, Text, Textarea, Title } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useCallback } from "react";
 import { useIssue } from "@/hooks/useIssue";
 
 const IssueNumber = () => {
   const router = useRouter();
   const { issueNumber } = router.query;
-  const { issue, comments } = useIssue(issueNumber as string);
+  const { issue, comments, createComment } = useIssue(issueNumber as string);
+
+  const form = useForm({
+    initialValues: { body: "" },
+    validate: {
+      body: (val) => val ? null : "Required",
+    },
+  });
+  const submit = useCallback(async ({ body }: { body: string }) => {
+    await createComment(body);
+    form.reset();
+  }, [createComment, form]);
 
   return (
     <Stack spacing={12} sx={{ width: 400 }}>
@@ -32,6 +45,15 @@ const IssueNumber = () => {
           <Text size="sm" align="right">{new Date(comment.createdAt).toLocaleString()}</Text>
         </Card>
       ))}
+      <form onSubmit={form.onSubmit((params) => submit(params))}>
+        <Textarea
+          withAsterisk
+          label="Comment"
+          placeholder="Content"
+          {...form.getInputProps("body")}
+        />
+        <Button fullWidth mt={12} type="submit">Post comment</Button>
+      </form>
     </Stack>
   );
 };
