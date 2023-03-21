@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Comment, Issue, IssueResponse } from "@/pages/api/issues/[issueNumber]";
 
 export const useIssue = (issueNumber: string) => {
+  const [loading, setLoading] = useState(true);
   const [issue, setIssue] = useState<Issue | undefined>();
   const [comments, setComments] = useState<Comment[]>([]);
 
@@ -38,8 +39,9 @@ export const useIssue = (issueNumber: string) => {
       const { comments, ...issue } = res.repository.issue;
       setIssue(issue);
       setComments(comments.nodes);
+      setLoading(false);
     })();
   }, [getIssue]);
 
-  return { issue, comments, createComment };
+  return { issue, comments, createComment, loading };
 };

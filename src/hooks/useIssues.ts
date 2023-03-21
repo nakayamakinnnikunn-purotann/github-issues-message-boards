@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Issue, IssuesResponse } from "@/pages/api/issues";
 
 export const useIssues = () => {
+  const [loading, setLoading] = useState(true);
   const [repositoryId, setRepositoryId] = useState<string | undefined>();
   const [issues, setIssues] = useState<Issue[]>([]);
 
@@ -36,8 +37,9 @@ export const useIssues = () => {
       const res = await getIssues();
       setRepositoryId(res.repository.id);
       setIssues(res.repository.issues.nodes);
+      setLoading(false);
     })();
   }, [getIssues]);
 
-  return { issues, createIssue };
+  return { issues, createIssue, loading };
 };

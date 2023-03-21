@@ -1,4 +1,15 @@
-import { Badge, Button, Card, Group, Stack, Text, TextInput, Textarea } from "@mantine/core";
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  Group,
+  LoadingOverlay,
+  Stack,
+  Text,
+  TextInput,
+  Textarea,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import Link from "next/link";
 import { useCallback } from "react";
@@ -6,7 +17,7 @@ import { useCallback } from "react";
 import { useIssues } from "@/hooks/useIssues";
 
 const Home = () => {
-  const { issues, createIssue } = useIssues();
+  const { issues, createIssue, loading } = useIssues();
 
   const form = useForm({
     initialValues: {
@@ -41,6 +52,11 @@ const Home = () => {
           New issue
         </Button>
       </form>
+      {loading && (
+        <Box pos="relative" sx={{ height: 100 }}>
+          <LoadingOverlay visible={true} />
+        </Box>
+      )}
       {issues.map((issue) => (
         <Card
           component={Link}
