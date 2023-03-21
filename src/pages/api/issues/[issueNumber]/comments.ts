@@ -28,7 +28,7 @@ mutation ($issueId: ID!, $body:String!) {
 const post = async (req: NextApiRequest, res: NextApiResponse) => {
   const { issueId, body } = req.body;
   if (!issueId || !body) {
-    return res.status(400);
+    return res.status(400).end();
   }
   const createCommentResponse = await graphqlClient<CreateCommentResponse>(createCommentMutation, {
     issueId,
@@ -41,6 +41,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === "POST") {
     await post(req, res);
   } else {
-    throw new Error(`unsupported method: ${req.method}`);
+    return res.status(405).end();
   }
 }

@@ -61,6 +61,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === "GET") {
     await get(req, res);
   } else {
-    throw new Error(`unsupported method: ${req.method}`);
+    return res.status(405).end();
   }
 }

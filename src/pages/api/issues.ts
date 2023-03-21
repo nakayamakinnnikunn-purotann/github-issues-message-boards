@@ -79,7 +79,7 @@ const get = async (req: NextApiRequest, res: NextApiResponse) => {
 const post = async (req: NextApiRequest, res: NextApiResponse) => {
   const { repositoryId, title, body } = req.body;
   if (!repositoryId || !title) {
-    return res.status(400);
+    return res.status(400).end();
   }
   const createIssueResponse = await graphqlClient<CreateIssueResponse>(createIssueMutation, {
     repositoryId,
@@ -95,6 +95,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } else if (req.method === "POST") {
     await post(req, res);
   } else {
-    throw new Error(`unsupported method: ${req.method}`);
+    return res.status(405).end();
   }
 }
